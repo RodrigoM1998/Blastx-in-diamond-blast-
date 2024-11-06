@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Directory containing FASTA files for different species
+input_dir="/example/path/to/fasta_files/species"
+output_dir="/example/path/to/fasta_files/outputs"
+database="/example/path/to/databases/example_database.dmnd"
+
+# List of FASTA files for each species (each name separated by a space)
+species_files=("speciesA_sequences.fasta" "speciesB_sequences.fasta" "speciesC_sequences.fasta" "speciesD_sequences.fasta" "speciesE_sequences.fasta")
+
+# Diamond parameter
+evalue="1e-10"
+
+# Loop through each species file
+for species_file in "${species_files[@]}"; do
+    # Extract the species name from the file (removing the .fasta extension)
+    species_name=$(basename "$species_file" .fasta)
+    
+    # Define the output XML file for each species
+    output_file="$output_dir/${species_name}_blast_results.xml"
+    
+    # Run Diamond and save the result in XML format
+    /example/path/to/diamond blastx -d "$database" -q "$input_dir/$species_file" --evalue "$evalue" --outfmt 5 -o "$output_file"
+    
+    echo "Alignment for $species_name saved in $output_file"
+done
